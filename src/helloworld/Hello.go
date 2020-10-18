@@ -19,6 +19,8 @@ func main() {
 	fmt.Println(testReturnNums())
 
 	testConst()
+
+	testChannel()
 }
 
 
@@ -36,4 +38,14 @@ func testReturnNums()(int,int,string) {
 
 func testConst() {
 	println(a,b)
+}
+
+func testChannel() {
+	//创建一个channel 用于通信的管道
+	messages:= make(chan string)
+	go func() {	messages <- "hello"}()
+	msg,ok := <- messages
+	if(ok) {
+		fmt.Println(msg)
+	}
 }
