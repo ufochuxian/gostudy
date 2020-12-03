@@ -5,7 +5,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func Send() {
+func Send(sublids []string) {
 	fmt.Println("begin send")
 	ch := getChannel()
 	q, err := ch.QueueDeclare(
@@ -17,8 +17,15 @@ func Send() {
 		nil,          //arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	body := "hello"
 
+	for i := 0; i < len(sublids); i++ {
+		publish(err, ch, q, sublids[i])
+	}
+	fmt.Println("发送消息成功")
+}
+
+func publish(err error, ch *amqp.Channel, q amqp.Queue, body string) {
+	fmt.Printf("publish:%s\n", body)
 	err = ch.Publish(
 		"",     //exchange
 		q.Name, // routing key
@@ -29,5 +36,4 @@ func Send() {
 			Body:        []byte(body),
 		},
 	)
-	fmt.Println("创建producer成功")
 }

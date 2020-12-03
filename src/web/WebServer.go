@@ -8,29 +8,25 @@ import (
 	"log"
 	"myutil"
 	"net/http"
-	"time"
 )
 
 var callPackSubLesson = func(c *gin.Context) {
 	sublids := c.QueryArray("sublid")
 	fmt.Println(sublids)
-	prepareSend()
-	myutil.Receive()
+	prepareSend(sublids)
 }
 
-func prepareSend() {
-	fmt.Println("begin prepareSend")
-	timer1 := time.NewTimer(2 * time.Second)
-	<-timer1.C
-	fmt.Println("begin send")
-	myutil.Send()
+func prepareSend(sublids []string) {
+	//fmt.Println("begin prepareSend")
+	//timer1 := time.NewTimer(1 * time.Second)
+	//<-timer1.C
+	//fmt.Println("begin send")
+	myutil.Send(sublids)
 }
 
 func main() {
+	myutil.Receive()
 	router := gin.Default()
-	router.GET("/", func(context *gin.Context) {
-		println("welcome to use gin")
-	})
 	router.GET("/callPackSubLesson", callPackSubLesson)
 	log.Fatal(http.ListenAndServe(":9090", router))
 }
