@@ -42,10 +42,13 @@ func Receive() {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received a message : %s", d.Body)
+			log.Printf("Received a message : %s\r", d.Body)
 			queue.Push(d.Body)
+			sublid := d.Body
+			url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + string(sublid) + ".zip"
+			fileName := string(sublid) + ".zip"
+			DownloadFile(url, fileName)
 		}
-		fmt.Println("gqueue:")
 	}()
 
 	fmt.Println("创建consumer成功")
