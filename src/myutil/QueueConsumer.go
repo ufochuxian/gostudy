@@ -1,11 +1,12 @@
 package myutil
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/gogf/gf/container/gqueue"
 	_ "github.com/gogf/gf/container/gqueue"
 	_ "github.com/gogf/gf/os/gtimer"
 	"log"
+	"strconv"
 )
 
 func Receive() {
@@ -38,16 +39,28 @@ func Receive() {
 
 	//forever := make(chan bool)
 
-	queue := gqueue.New()
+	//queue := gqueue.New()
 
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message : %s\r", d.Body)
-			queue.Push(d.Body)
-			sublid := d.Body
-			url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + string(sublid) + ".zip"
-			fileName := string(sublid) + ".zip"
-			DownloadFile(url, fileName)
+			b := []byte(d.Body)
+			sublessoninfo := Sublessoninfo{}
+			err := json.Unmarshal(b, &sublessoninfo)
+			if err != nil {
+				fmt.Println(err)
+			}
+			//queue.Push(d.Body)
+			sublid := sublessoninfo.SublessonId
+
+			if sublid == 1 {
+				url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + strconv.Itoa(sublid) + ".zip"
+				fileName := strconv.Itoa(sublid) + ".zip"
+				DownloadFile(url, fileName)
+			}
+
+			url := "http://dev.cms.tgmgrp.com/v1/resource/upload/cocos"
+			FileUpload(url, "./sublesson01.zip")
 		}
 	}()
 

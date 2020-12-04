@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -11,22 +12,26 @@ import (
 )
 
 var callPackSubLesson = func(c *gin.Context) {
-	sublids := c.QueryArray("sublid")
-	fmt.Println(sublids)
-	prepareSend(sublids)
+	var sublessoninfos []*myutil.Sublessoninfo
+	err := c.BindJSON(&sublessoninfos)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(len(sublessoninfos))
+	prepareSend(sublessoninfos)
 }
 
-func prepareSend(sublids []string) {
+func prepareSend(sublids []*myutil.Sublessoninfo) {
 	//fmt.Println("begin prepareSend")
 	//timer1 := time.NewTimer(1 * time.Second)
 	//<-timer1.C
-	//fmt.Println("begin send")
+	fmt.Println("begin send")
 	myutil.Send(sublids)
 }
 
 func main() {
 	myutil.Receive()
 	router := gin.Default()
-	router.GET("/callPackSubLesson", callPackSubLesson)
+	router.POST("/callPackSubLesson", callPackSubLesson)
 	log.Fatal(http.ListenAndServe(":9090", router))
 }

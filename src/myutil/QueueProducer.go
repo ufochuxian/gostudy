@@ -1,11 +1,12 @@
 package myutil
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/streadway/amqp"
 )
 
-func Send(sublids []string) {
+func Send(sublids []*Sublessoninfo) {
 	fmt.Println("begin send")
 	ch := getChannel()
 	q, err := ch.QueueDeclare(
@@ -19,12 +20,13 @@ func Send(sublids []string) {
 	failOnError(err, "Failed to declare a queue")
 
 	for i := 0; i < len(sublids); i++ {
-		publish(err, ch, q, sublids[i])
+		bytes,err := json.Marshal(sublids[i])
+		publish(err, ch, q, bytes)
 	}
 	fmt.Println("发送消息成功")
 }
 
-func publish(err error, ch *amqp.Channel, q amqp.Queue, body string) {
+func publish(err error, ch *amqp.Channel, q amqp.Queue, body []byte) {
 	fmt.Printf("publish:%s\n", body)
 	err = ch.Publish(
 		"",     //exchange
@@ -32,8 +34,8 @@ func publish(err error, ch *amqp.Channel, q amqp.Queue, body string) {
 		false,  //mandatory
 		false,  //immediate
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(body),
+			ContentType: "application/json",
+			Body:        body,
 		},
 	)
 }
