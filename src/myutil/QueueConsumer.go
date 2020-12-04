@@ -54,13 +54,18 @@ func Receive() {
 			sublid := sublessoninfo.SublessonId
 
 			if sublid == 1 {
-				url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + strconv.Itoa(sublid) + ".zip"
-				fileName := strconv.Itoa(sublid) + ".zip"
-				DownloadFile(url, fileName)
+				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(sublid) + ".zip"
+				saveFilePath := "/Users/chen/Documents/TGM/cocos/tgm-clientcocos/assets/resources/Package/"
+				fileName := saveFilePath + strconv.Itoa(sublid) + ".zip"
+
+				rs := Result{
+					sublessoninfo,
+				}
+				DownloadFile(url, fileName,rs)
 			}
 
-			url := "http://dev.cms.tgmgrp.com/v1/resource/upload/cocos"
-			FileUpload(url, "./sublesson01.zip")
+			//url := "http://dev.cms.tgmgrp.com/v1/resource/upload/cocos"
+			//FileUpload(url, "./sublesson01.zip")
 		}
 	}()
 
@@ -68,3 +73,5 @@ func Receive() {
 	//log.Printf(" [*] Waiting for messages, To exit press CTRL+C")
 	//<-forever
 }
+
+

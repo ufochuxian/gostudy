@@ -22,7 +22,7 @@ var callPackSubLesson = func(c *gin.Context) {
 }
 
 func prepareSend(sublids []*myutil.Sublessoninfo) {
-	//fmt.Println("begin prepareSend")
+	//fmt.Println("begin prepareSend	")
 	//timer1 := time.NewTimer(1 * time.Second)
 	//<-timer1.C
 	fmt.Println("begin send")
@@ -32,6 +32,6 @@ func prepareSend(sublids []*myutil.Sublessoninfo) {
 func main() {
 	myutil.Receive()
 	router := gin.Default()
-	router.POST("/callPackSubLesson", callPackSubLesson)
+	router.POST("/call_pack_sub_lesson", callPackSubLesson)
 	log.Fatal(http.ListenAndServe(":9090", router))
 }
