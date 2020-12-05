@@ -55,17 +55,13 @@ func Receive() {
 
 			if sublid == 1 {
 				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(sublid) + ".zip"
-				saveFilePath := "/Users/chen/Documents/TGM/cocos/tgm-clientcocos/assets/resources/Package/"
-				fileName := saveFilePath + strconv.Itoa(sublid) + ".zip"
+				fileName := sublessonSaveFilepath + strconv.Itoa(sublid) + ".zip"
 
 				rs := Result{
 					sublessoninfo,
 				}
 				DownloadFile(url, fileName,rs)
 			}
-
-			//url := "http://dev.cms.tgmgrp.com/v1/resource/upload/cocos"
-			//FileUpload(url, "./sublesson01.zip")
 		}
 	}()
 
