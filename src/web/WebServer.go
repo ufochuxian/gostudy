@@ -24,9 +24,6 @@ var callPackSubLesson = func(c *gin.Context) {
 }
 
 func prepareSend(sublids []*myutil.Sublessoninfo, callback tgmnet.Callback) {
-	//fmt.Println("begin prepareSend	")
-	//timer1 := time.NewTimer(1 * time.Second)
-	//<-timer1.C
 	fmt.Println("begin send")
 	myutil.Send(sublids, callback)
 }

@@ -8,11 +8,13 @@ import (
 	"tgmnet"
 )
 
+const QueueName = "sublessons"
+
 func Send(sublids []*Sublessoninfo, callback tgmnet.Callback) {
-	fmt.Println("begin send")
+	log.Println("begin send")
 	ch := getChannel()
 	q, err := ch.QueueDeclare(
-		"sublessons", //name
+		QueueName, //name
 		false,        //durable
 		true,         //delete when unused
 		false,        //exclusive
@@ -24,7 +26,7 @@ func Send(sublids []*Sublessoninfo, callback tgmnet.Callback) {
 		bytes, err := json.Marshal(sublids[i])
 		publish(err, ch, q, bytes, callback)
 	}
-	fmt.Println("发送消息成功")
+	log.Println("发送消息成功")
 }
 
 func publish(err error, ch *amqp.Channel, q amqp.Queue, body []byte, callback tgmnet.Callback) {
