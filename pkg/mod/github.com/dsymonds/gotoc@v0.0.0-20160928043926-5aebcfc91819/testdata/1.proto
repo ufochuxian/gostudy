@@ -1,0 +1,10 @@
+// Just the basics
+
+syntax = "proto2";
+
+message A {
+  required int32 a = 1;
+  optional string b = 2;
+  // skip field 3
+  repeated sint64 c = 4;
+}

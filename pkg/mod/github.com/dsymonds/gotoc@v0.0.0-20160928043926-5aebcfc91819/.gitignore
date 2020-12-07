@@ -1,0 +1,8 @@
+.*.swp
+.DS_Store
+_mini*
+_testmain.go
+gotoc
+testdata/*.actual
+testdata/mini*.pb.go
+testdata/protocmp

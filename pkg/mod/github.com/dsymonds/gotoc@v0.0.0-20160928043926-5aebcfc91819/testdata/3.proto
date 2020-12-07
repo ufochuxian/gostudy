@@ -1,0 +1,9 @@
+// Default values.
+
+syntax = "proto2";
+
+message A {
+  optional int32 int = 1 [default=7];
+  optional bool boolean = 2 [default=true];
+  optional string str = 3 [default="boo"];
+}

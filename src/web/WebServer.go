@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -9,6 +8,7 @@ import (
 	"log"
 	"myutil"
 	"net/http"
+	"tgmnet"
 )
 
 var callPackSubLesson = func(c *gin.Context) {
@@ -18,15 +18,17 @@ var callPackSubLesson = func(c *gin.Context) {
 		log.Fatal(err)
 	}
 	fmt.Println(len(sublessoninfos))
-	prepareSend(sublessoninfos)
+	prepareSend(sublessoninfos, func(resp tgmnet.ResponseOld) {
+		c.JSON(http.StatusOK, resp)
+	})
 }
 
-func prepareSend(sublids []*myutil.Sublessoninfo) {
+func prepareSend(sublids []*myutil.Sublessoninfo, callback tgmnet.Callback) {
 	//fmt.Println("begin prepareSend	")
 	//timer1 := time.NewTimer(1 * time.Second)
 	//<-timer1.C
 	fmt.Println("begin send")
-	myutil.Send(sublids)
+	myutil.Send(sublids, callback)
 }
 
 func main() {

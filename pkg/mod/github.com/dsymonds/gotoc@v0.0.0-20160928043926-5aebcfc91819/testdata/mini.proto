@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+// This is a test package.
+// As you can see, comments will be ignored.
+package foo.bar.baz;
+
+import "testdata/imp.proto";
+import "testdata/imp2.proto";
+
+message Bar {
+  required int32 height = 1;
+  optional string name = 2;
+  optional Other other = 3;
+
+  optional group Groupie = 7 {
+    required string x = 1;
+  }
+
+  message Nested {}
+  optional Nested nested = 4;
+
+  optional Foreign alien = 5;
+  optional imp2.Document doc = 6;
+
+  map<string, int32> a_map_field = 8;
+}
+
+message Other {
+  required int64 count = 1;
+}
