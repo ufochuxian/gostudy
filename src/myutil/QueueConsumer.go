@@ -53,7 +53,7 @@ func Receive() {
 			//queue.Push(d.Body)
 			sublid := sublessoninfo.SublessonId
 
-			if sublid == 1 {
+			if sublid == 76 {
 				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(sublid) + ".zip"
 				fileName := sublessonSaveFilepath + strconv.Itoa(sublid) + ".zip"
 
