@@ -37,37 +37,29 @@ func Receive() {
 
 	failOnError(err, "Failed to register a consumer")
 
-	//forever := make(chan bool)
-
-	//queue := gqueue.New()
-
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message : %s\r", d.Body)
 			b := []byte(d.Body)
-			sublessoninfo := Sublessoninfo{}
-			err := json.Unmarshal(b, &sublessoninfo)
+			subLessonInfo := Sublessoninfo{}
+			err := json.Unmarshal(b, &subLessonInfo)
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 			}
 			//queue.Push(d.Body)
-			sublid := sublessoninfo.SublessonId
+			subLid := subLessonInfo.SublessonId
 
-			if sublid == 76 {
-				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(sublid) + ".zip"
-				fileName := sublessonSaveFilepath + strconv.Itoa(sublid) + ".zip"
+			if subLid == 76 {
+				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(subLid) + ".zip"
+				fileName := sublessonSaveFilepath + strconv.Itoa(subLid) + ".zip"
 
 				rs := Result{
-					sublessoninfo,
+					subLessonInfo,
 				}
-				DownloadFile(url, fileName,rs)
+				DownloadFile(url, fileName, rs)
 			}
 		}
 	}()
 
 	fmt.Println("创建consumer成功")
-	//log.Printf(" [*] Waiting for messages, To exit press CTRL+C")
-	//<-forever
 }
-
-
