@@ -2,7 +2,7 @@ package myutil
 
 import (
 	"bytes"
-	"fmt"
+	_ "github.com/asaskevich/EventBus"
 	"io"
 	"log"
 	"mime/multipart"
@@ -63,10 +63,11 @@ func UploadFile(url string, filePath string, fileName string, uoloadFileType str
 			log.Fatal(err)
 		}
 		resp.Body.Close()
-		fmt.Println(resp.StatusCode)
-		fmt.Println(resp.Header)
+		log.Println(resp.StatusCode)
+		log.Println(resp.Header)
 
-		fmt.Println(body)
+		log.Println(body)
 	}
-	fmt.Println("finished upload")
+	globalBus.Publish(Pack_Sub_Lesson,fileName)
+	log.Println("finished upload")
 }

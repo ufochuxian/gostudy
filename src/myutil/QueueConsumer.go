@@ -2,15 +2,21 @@ package myutil
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/asaskevich/EventBus"
 	_ "github.com/gogf/gf/container/gqueue"
 	_ "github.com/gogf/gf/os/gtimer"
 	"log"
 	"strconv"
 )
 
+var globalBus = EventBus.New()
+
+
 func Receive() {
-	fmt.Println("begin receive")
+	log.Println("begin receive")
+	globalBus.Subscribe(Pack_Sub_Lesson, func(fileName string) {
+		log.Printf("%s，子课程课程构建成功", fileName)
+	})
 	ch := getChannel()
 	q, err := ch.QueueDeclare(
 		"sublessons", //name
@@ -20,9 +26,9 @@ func Receive() {
 		false,        //no wait
 		nil,          //arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	failOnError(err, "Failed to declare a que")
 
-	fmt.Printf("收到消息:%s\n", q.Messages)
+	log.Printf("收到消息:%s\n", q.Messages)
 
 	msgs, err := ch.Consume(
 		q.Name, // queue
@@ -33,7 +39,7 @@ func Receive() {
 		false,  // no-wait
 		nil,    // arguments
 	)
-	fmt.Println(msgs)
+	log.Println(msgs)
 
 	failOnError(err, "Failed to register a consumer")
 
@@ -49,17 +55,15 @@ func Receive() {
 			//queue.Push(d.Body)
 			subLid := subLessonInfo.SublessonId
 
-			if subLid == 76 {
-				url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(subLid) + ".zip"
-				fileName := sublessonSaveFilepath + strconv.Itoa(subLid) + ".zip"
+			url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(subLid) + ".zip"
+			fileName := sublessonSaveFilepath + strconv.Itoa(subLid) + ".zip"
 
-				rs := Result{
-					subLessonInfo,
-				}
-				DownloadFile(url, fileName, rs)
+			rs := Result{
+				subLessonInfo,
 			}
+			DownloadFile(url, fileName, rs)
 		}
 	}()
 
-	fmt.Println("创建consumer成功")
+	log.Println("创建consumer成功")
 }
