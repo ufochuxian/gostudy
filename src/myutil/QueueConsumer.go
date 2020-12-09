@@ -11,7 +11,6 @@ import (
 
 var globalBus = EventBus.New()
 
-
 func Receive() {
 	log.Println("begin receive")
 	globalBus.Subscribe(Pack_Sub_Lesson, func(fileName string) {
@@ -55,7 +54,7 @@ func Receive() {
 			//queue.Push(d.Body)
 			subLid := subLessonInfo.SublessonId
 
-			url := "http://cmscdn.tgmgrp.com/cocos/zip/" + strconv.Itoa(subLid) + ".zip"
+			url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + strconv.Itoa(subLid) + ".zip"
 			fileName := sublessonSaveFilepath + strconv.Itoa(subLid) + ".zip"
 
 			rs := Result{

@@ -35,10 +35,24 @@ func (r Result) Success() {
 			fmt.Println("uoload file not exists")
 			return
 		}
-		UploadFile(url, filePath, fileName, "1")
+		UploadFile(url, filePath, fileName, "1", func() {
+			//上传成功
+			log.Println("上传子课程成功")
+			mainFileName := "Main.zip"
+			mainFilePath := buildSublessonFile + mainFileName
+			log.Printf("开始上传Main.zip,mainFileName:%s,mainFilePath:%s", mainFileName, mainFilePath)
+			_, err := os.Stat(mainFilePath)
+			if err != nil {
+				log.Println("mainFile not exists")
+				return
+			}
+			UploadFile(url, mainFilePath, mainFileName, "1", func() {
+				//上传成功
+				log.Printf("上传main成功")
+			})
+		})
 	}
 }
-
 
 func (r Result) Loading() {
 

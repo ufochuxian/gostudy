@@ -11,6 +11,9 @@ import (
 	"path/filepath"
 )
 
+func uploadSubSuccess() {
+
+}
 // Creates a new file upload http request with optional extra params
 func newfileUploadRequest(uri string, params map[string]string, paramName, path string) (*http.Request, error) {
 	file, err := os.Open(path)
@@ -41,7 +44,7 @@ func newfileUploadRequest(uri string, params map[string]string, paramName, path 
 	return request, err
 }
 
-func UploadFile(url string, filePath string, fileName string, uoloadFileType string) {
+func UploadFile(url string, filePath string, fileName string, uoloadFileType string,uploadSubSuccess func()) {
 	log.Printf("begin upload,url:%s,filePath:%s,fileName:%s,uoloadFileType:%s", url, filePath, fileName, uoloadFileType)
 	//path := "/Users/chen/Documents/TGM/server/sublesson01.zip"
 	extraParams := map[string]string{
@@ -56,6 +59,7 @@ func UploadFile(url string, filePath string, fileName string, uoloadFileType str
 	resp, err := client.Do(request)
 	if err != nil {
 		log.Fatal(err)
+		return
 	} else {
 		body := &bytes.Buffer{}
 		_, err := body.ReadFrom(resp.Body)
@@ -68,6 +72,7 @@ func UploadFile(url string, filePath string, fileName string, uoloadFileType str
 
 		log.Println(body)
 	}
+	uploadSubSuccess()
 	globalBus.Publish(Pack_Sub_Lesson,fileName)
 	log.Println("finished upload")
 }

@@ -2,24 +2,27 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
-	"os/exec"
+	"path/filepath"
 )
 
-func main() {
-	//log.Println("start executeBuildSublesson")
-	buildCommand := "/Users/chen/Documents/TGM/cocos/tgm-clientcocos/buildTools/build.sh '1' '1' '1'"
-	//cmd := exec.Command("cmd","/C","/Users/chen/Documents/TGM/cocos/tgm-clientcocos/buildTools/build","1","1","1")
-	////cmd.Dir = "/Users/chen/Documents/TGM/cocos/tgm-clientcocos/buildTools/"
-	//output, err := cmd.Output()
-	//if err != nil {
-	//	fmt.Println("err:,output:",err,output)
-	//}
-	//log.Println("end execute command:", output)
+// get current project's root path
+// return path not contain the exec file
+func GetProjectRoot() string {
+	var (
+		path string
+		err  error
+	)
+	defer func() {
+		if err != nil {
+			panic(fmt.Sprintf("GetProjectRoot error :%+v", err))
+		}
+	}()
+	path, err = filepath.Abs(filepath.Dir(os.Args[0]))
+	return path
+}
 
-	output, err := exec.Command("/bin/sh", "-c",buildCommand).CombinedOutput()
-	if err != nil {
-		os.Stderr.WriteString(err.Error())
-	}
-	fmt.Println(string(output))
+func main() {
+	log.Println(GetProjectRoot())
 }
