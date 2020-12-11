@@ -40,7 +40,7 @@ func (wc WriteCounter) PrintProgress() {
 // loading the entire file into memory.
 // We pass an io.TeeReader into Copy() to report progress on the download.
 func DownloadFile(url string, filepath string, result DownloadResult) error {
-	fmt.Println("start download")
+	fmt.Println("start download:url:",url)
 	// Create the file with .tmp extension, so that we won't overwrite a
 	// file until it's downloaded fully
 	out, err := os.Create(filepath + ".tmp")
