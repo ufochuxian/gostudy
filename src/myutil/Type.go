@@ -32,7 +32,8 @@ func (r Result) Success() {
 		log.Printf("end execute command,fileName:%s,filePath:%s", fileName, filePath)
 		_, err := os.Stat(filePath)
 		if err != nil {
-			fmt.Println("uoload file not exists")
+			ReportToFeishu("cocos构建子课程包可能失败啦，本地没有生成构建后的子课程包", r.SubLessonId)
+			fmt.Println("upload file not exists")
 			return
 		}
 		UploadFile(url, filePath, fileName, "1", func() {
@@ -41,6 +42,7 @@ func (r Result) Success() {
 			mainFileName := "Main.zip"
 			mainFilePath := buildSublessonFile + mainFileName
 			log.Printf("开始上传Main.zip,mainFileName:%s,mainFilePath:%s", mainFileName, mainFilePath)
+			log.Println()
 			_, err := os.Stat(mainFilePath)
 			if err != nil {
 				log.Println("mainFile not exists")
@@ -48,7 +50,8 @@ func (r Result) Success() {
 			}
 			UploadFile(url, mainFilePath, mainFileName, "1", func() {
 				//上传成功
-				log.Printf("上传main成功")
+				log.Println("上传main成功")
+				ReportToFeishu("打包成功啦", r.SubLessonId)
 			})
 		})
 	}
