@@ -3,6 +3,7 @@ package myutil
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -45,6 +46,7 @@ func DownloadFile(url string, filepath string, result DownloadResult) error {
 	// file until it's downloaded fully
 	out, err := os.Create(filepath + ".tmp")
 	if err != nil {
+		log.Printf("download error:%s", err)
 		return err
 	}
 	defer out.Close()
@@ -56,6 +58,8 @@ func DownloadFile(url string, filepath string, result DownloadResult) error {
 	req.Header.Set("X-Token", "d8cdcf8427e")
 	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
+		//下载失败
+		fmt.Printf("下载失败：%s,resp code:%d", err, resp.StatusCode)
 		return err
 	}
 	defer resp.Body.Close()
