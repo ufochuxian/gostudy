@@ -10,7 +10,7 @@ import (
 
 const QueueName = "sublessons"
 
-func Send(sublids []*Sublessoninfo, callback tgmnet.Callback) {
+func Send(sublids []*SubLessonInfo, callback tgmnet.Callback) {
 	log.Println("begin send")
 	ch := getChannel()
 	q, err := ch.QueueDeclare(

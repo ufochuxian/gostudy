@@ -8,9 +8,9 @@ import (
 	"strconv"
 )
 
-func ExecuteBuildSublesson(sublessoninfo Sublessoninfo) {
+func ExecuteBuildSublesson(sublessoninfo SubLessonInfo) {
 	log.Println("start executeBuildSublesson")
-	sublid := sublessoninfo.SublessonId
+	sublid := sublessoninfo.SubLessonId
 	buildCommand := "/Users/chen/Documents/TGM/cocos/tgm-clientcocos/buildTools/build.sh '" + strconv.Itoa(sublid) + "' '" + sublessoninfo.SubpackageVersion + "' '" + sublessoninfo.BasepackageVersion + "'"
 	output, err := exec.Command("/bin/sh", "-c",buildCommand).CombinedOutput()
 	if err != nil {

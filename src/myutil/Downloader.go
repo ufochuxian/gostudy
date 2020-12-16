@@ -40,7 +40,7 @@ func (wc WriteCounter) PrintProgress() {
 // It writes to the destination file as it downloads it, without
 // loading the entire file into memory.
 // We pass an io.TeeReader into Copy() to report progress on the download.
-func DownloadFile(url string, filepath string, result DownloadResult) error {
+func DownloadFile(url string, filepath string, result DownloadSubLessonResult) error {
 	fmt.Println("start download:url:",url)
 	// Create the file with .tmp extension, so that we won't overwrite a
 	// file until it's downloaded fully
@@ -57,9 +57,9 @@ func DownloadFile(url string, filepath string, result DownloadResult) error {
 	// 比如说设置个token
 	req.Header.Set("X-Token", "d8cdcf8427e")
 	resp, err := (&http.Client{}).Do(req)
-	if err != nil {
+	if err != nil || resp.StatusCode == http.StatusNotFound {
 		//下载失败
-		fmt.Printf("下载失败：%s,resp code:%d", err, resp.StatusCode)
+		result.Fail()
 		return err
 	}
 	defer resp.Body.Close()
@@ -83,7 +83,7 @@ func DownloadFile(url string, filepath string, result DownloadResult) error {
 	return nil
 }
 
-type DownloadResult interface {
+type DownloadSubLessonResult interface {
 	Success()
 	Loading()
 	Fail()

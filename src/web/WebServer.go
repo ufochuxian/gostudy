@@ -12,7 +12,7 @@ import (
 )
 
 var callPackSubLesson = func(c *gin.Context) {
-	var sublessoninfos []*myutil.Sublessoninfo
+	var sublessoninfos []*myutil.SubLessonInfo
 	err := c.BindJSON(&sublessoninfos)
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +23,7 @@ var callPackSubLesson = func(c *gin.Context) {
 	})
 }
 
-func prepareSend(sublids []*myutil.Sublessoninfo, callback tgmnet.Callback) {
+func prepareSend(sublids []*myutil.SubLessonInfo, callback tgmnet.Callback) {
 	fmt.Println("begin send")
 	myutil.Send(sublids, callback)
 }

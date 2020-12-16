@@ -46,13 +46,13 @@ func Receive() {
 		for d := range msgs {
 			log.Printf("Received a message : %s\r", d.Body)
 			b := []byte(d.Body)
-			subLessonInfo := Sublessoninfo{}
+			subLessonInfo := SubLessonInfo{}
 			err := json.Unmarshal(b, &subLessonInfo)
 			if err != nil {
 				log.Println(err)
 			}
 			//queue.Push(d.Body)
-			subLid := subLessonInfo.SublessonId
+			subLid := subLessonInfo.SubLessonId
 
 			url := "http://cmscdn.tgmgrp.com/pre_cocos_zip/" + strconv.Itoa(subLid) + ".zip"
 			fileName := sublessonSaveFilepath + strconv.Itoa(subLid) + ".zip"

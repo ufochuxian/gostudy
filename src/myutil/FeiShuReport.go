@@ -1,30 +1,12 @@
-package main
+package myutil
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strconv"
 )
-
-// get current project's root path
-// return path not contain the exec file
-func GetProjectRoot() string {
-	var (
-		path string
-		err  error
-	)
-	defer func() {
-		if err != nil {
-			panic(fmt.Sprintf("GetProjectRoot error :%+v", err))
-		}
-	}()
-	path, err = filepath.Abs(filepath.Dir(os.Args[0]))
-	return path
-}
 
 type Content struct {
 	Text string `json:"text"`
@@ -35,11 +17,15 @@ type ReportRequest struct {
 	Content Content `json:"content"`
 }
 
-const PACKAGE_SUBLESSON_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/4b9d8ca5-fc53-4295-9dc9-dde17d661ea2"
+const PackageSublessonUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/4b9d8ca5-fc53-4295-9dc9-dde17d661ea2"
 
 func ReportToFeishu(text string, subId int) {
+	if text == "" {
+		fmt.Printf("上报给飞书的信息不能为空")
+		return
+	}
 	reqStr := buildReq(text, subId)
-	req, err := http.NewRequest("POST", PACKAGE_SUBLESSON_URL, bytes.NewBufferString(reqStr))
+	req, err := http.NewRequest("POST", PackageSublessonUrl, bytes.NewBufferString(reqStr))
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
@@ -67,8 +53,3 @@ func buildReq(text string, subId int) string {
 	}
 	return string(marshal)
 }
-
-//func main() {
-//	//log.Println(GetProjectRoot())
-//	ReportToFeishu("haha", 1)
-//}

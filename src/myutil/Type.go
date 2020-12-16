@@ -8,26 +8,26 @@ import (
 )
 
 type SublessonInfos struct {
-	SublessonInfos []*Sublessoninfo
+	SublessonInfos []*SubLessonInfo
 }
 
-type Sublessoninfo struct {
-	SublessonId        int    `json:"sublessonid"`
+type SubLessonInfo struct {
+	SubLessonId        int    `json:"sublessonid"`
 	SubpackageVersion  string `json:"subpackageversion"`
 	BasepackageVersion string `json:"basepackageversion"`
 }
 
 type Result struct {
-	Sublessoninfo
+	SubLessonInfo
 }
 
 func (r Result) Success() {
-	fmt.Println(r.SublessonId)
-	ExecuteBuildSublesson(r.Sublessoninfo)
-	if r.SublessonId != 0 {
+	fmt.Println(r.SubLessonId)
+	ExecuteBuildSublesson(r.SubLessonInfo)
+	if r.SubLessonId != 0 {
 		//构建成功，上传文件
 		url := uploadUrl
-		fileName := strconv.Itoa(r.SublessonId) + ".zip"
+		fileName := strconv.Itoa(r.SubLessonId) + ".zip"
 		filePath := buildSublessonFile + fileName
 		log.Printf("end execute command,fileName:%s,filePath:%s", fileName, filePath)
 		_, err := os.Stat(filePath)
@@ -59,5 +59,5 @@ func (r Result) Loading() {
 }
 
 func (r Result) Fail() {
-
+	ReportToFeishu("下载原始资源包失败", r.SubLessonId)
 }
