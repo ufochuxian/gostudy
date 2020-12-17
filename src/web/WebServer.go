@@ -18,14 +18,17 @@ var callPackSubLesson = func(c *gin.Context) {
 		log.Fatal(err)
 	}
 	fmt.Println(len(sublessoninfos))
-	prepareSend(sublessoninfos, func(resp tgmnet.ResponseOld) {
+	prepareSend(c, sublessoninfos, func(resp tgmnet.ResponseOld) {
 		c.JSON(http.StatusOK, resp)
 	})
 }
 
-func prepareSend(sublids []*myutil.SubLessonInfo, callback tgmnet.Callback) {
+func prepareSend(c *gin.Context, sublids []*myutil.SubLessonInfo, callback tgmnet.Callback) {
 	fmt.Println("begin send")
-	myutil.Send(sublids, callback)
+	err := myutil.Send(sublids, callback)
+	if err == nil {
+		c.JSON(http.StatusOK, "")
+	}
 }
 
 func main() {

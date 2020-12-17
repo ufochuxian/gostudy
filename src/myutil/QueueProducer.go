@@ -10,7 +10,7 @@ import (
 
 const QueueName = "sublessons"
 
-func Send(sublids []*SubLessonInfo, callback tgmnet.Callback) {
+func Send(sublids []*SubLessonInfo, callback tgmnet.Callback) error {
 	log.Println("begin send")
 	ch := getChannel()
 	q, err := ch.QueueDeclare(
@@ -21,15 +21,25 @@ func Send(sublids []*SubLessonInfo, callback tgmnet.Callback) {
 		false,        //no wait
 		nil,          //arguments
 	)
-	failOnError(err, "创建队列失败")
+	err = failOnError(err, "创建队列失败")
+	if err != nil {
+		log.Printf("创建消息队列失败")
+		return err
+	}
+	var publishErr error
 	for i := 0; i < len(sublids); i++ {
 		bytes, err := json.Marshal(sublids[i])
-		publish(err, ch, q, bytes, callback)
+		publishErr = publish(err, ch, q, bytes, callback)
 	}
-	log.Println("发送消息成功")
+	if publishErr != nil {
+		log.Println("发送打包消息到消息队列失败")
+		ReportToFeishu("发送打包消息到消息队列失败", -1)
+		return publishErr
+	}
+	return nil
 }
 
-func publish(err error, ch *amqp.Channel, q amqp.Queue, body []byte, callback tgmnet.Callback) {
+func publish(err error, ch *amqp.Channel, q amqp.Queue, body []byte, callback tgmnet.Callback) error{
 	fmt.Printf("publish:%s\n", body)
 	err = ch.Publish(
 		"",     //exchange
@@ -47,5 +57,7 @@ func publish(err error, ch *amqp.Channel, q amqp.Queue, body []byte, callback tg
 			Errno:  100,
 			ErrMsg: "打包失败，（发送消息队列失败）",
 		})
+		return err
 	}
+	return nil
 }
