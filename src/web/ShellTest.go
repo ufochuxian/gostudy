@@ -35,11 +35,15 @@ type ReportRequest struct {
 	Content Content `json:"content"`
 }
 
-const PACKAGE_SUBLESSON_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/4b9d8ca5-fc53-4295-9dc9-dde17d661ea2"
+const PackageSublessonUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/4b9d8ca5-fc53-4295-9dc9-dde17d661ea2"
 
-func ReportToFeishu(text string, subId int) {
-	reqStr := buildReq(text, subId)
-	req, err := http.NewRequest("POST", PACKAGE_SUBLESSON_URL, bytes.NewBufferString(reqStr))
+func reportToFeiShu(text string, subId int) {
+	if len(text) == 0 {
+		fmt.Printf("上报给飞书的字符串不能为空")
+		return
+	}
+		reqStr := buildReq(text, subId)
+	req, err := http.NewRequest("POST", PackageSublessonUrl, bytes.NewBufferString(reqStr))
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
@@ -70,5 +74,5 @@ func buildReq(text string, subId int) string {
 
 //func main() {
 //	//log.Println(GetProjectRoot())
-//	ReportToFeishu("haha", 1)
+//	ReportToFeiShu("haha", 1)
 //}

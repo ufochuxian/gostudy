@@ -64,3 +64,11 @@ func (r Result) Loading() {
 func (r Result) Fail() {
 	ReportToFeishu("下载原始资源包失败", r.SubLessonId)
 }
+
+type FeiShuReqBody struct {
+	MsgType string `json:"msg_type"`
+	SubLid int `json:"sub_lid"`
+	Content struct {
+		Text string `json:"text"`
+	} `json:"content"`
+}

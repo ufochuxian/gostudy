@@ -31,9 +31,24 @@ func prepareSend(c *gin.Context, sublids []*myutil.SubLessonInfo, callback tgmne
 	}
 }
 
+var reportFeiShuPackResult = func(c *gin.Context) {
+	var json myutil.FeiShuReqBody
+	fmt.Printf("reportFeiShuPackResult")
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		//返回错误信息
+		//gin.H封装了生成json数据的工具
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	myutil.ReportToFeishu(json.Content.Text, json.SubLid)
+	c.JSON(http.StatusOK, gin.H{"status": "200"})
+}
+
 func main() {
 	myutil.Receive()
 	router := gin.Default()
 	router.POST("/call_pack_sub_lesson", callPackSubLesson)
+	router.POST("/reportPackResult", reportFeiShuPackResult)
 	log.Fatal(http.ListenAndServe(":9090", router))
 }
