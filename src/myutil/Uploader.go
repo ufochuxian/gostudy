@@ -11,11 +11,8 @@ import (
 	"path/filepath"
 )
 
-func uploadSubSuccess() {
-
-}
 // Creates a new file upload http request with optional extra params
-func newfileUploadRequest(uri string, params map[string]string, paramName, path string) (*http.Request, error) {
+func newFileUploadRequest(uri string, params map[string]string, paramName, path string) (*http.Request, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -46,12 +43,11 @@ func newfileUploadRequest(uri string, params map[string]string, paramName, path 
 
 func UploadFile(url string, filePath string, fileName string, uoloadFileType string,uploadSubSuccess func()) {
 	log.Printf("begin upload,url:%s,filePath:%s,fileName:%s,uoloadFileType:%s", url, filePath, fileName, uoloadFileType)
-	//path := "/Users/chen/Documents/TGM/server/sublesson01.zip"
 	extraParams := map[string]string{
 		"name": fileName,
 		"type": uoloadFileType,
 	}
-	request, err := newfileUploadRequest(url, extraParams, "body", filePath)
+	request, err := newFileUploadRequest(url, extraParams, "body", filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
